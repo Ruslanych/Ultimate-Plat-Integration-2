@@ -1,4 +1,6 @@
 # Changelog
+## 1.0.1
+- Added tags to the mod description
 ## 1.0.0
 - Created informational labels containing:
    - Placement in TPL
