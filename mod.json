@@ -1,0 +1,25 @@
+{
+	"geode": "5.4.1",
+	"gd": {
+		"win": "2.2081",
+		"android": "2.2081",
+		"mac": "2.2081",
+		"ios": "2.2081"
+	},
+	"id": "ruslanych.ultimate-plat-integration-2",
+	"name": "Ultimate Plat Integration",
+	"version": "v1.0.0",
+	"developer": "Ruslanych",
+	"description": "Every Platformer List + Difficulty Chart",
+	"dependencies": {
+		"geode.node-ids": ">=v1.20.0"
+	},
+	"resources": {
+        "sprites": [
+            "resources/tpl.png",
+            "resources/pemon.png",
+            "resources/update_btn.png",
+			"resources/tiers/*"
+        ]
+    }
+}
