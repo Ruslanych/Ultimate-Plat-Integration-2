@@ -8,12 +8,18 @@
 	},
 	"id": "ruslanych.ultimate-plat-integration-2",
 	"name": "Ultimate Plat Integration",
-	"version": "v1.0.0",
+	"version": "v1.0.1",
 	"developer": "Ruslanych",
 	"description": "Every Platformer List + Difficulty Chart",
 	"dependencies": {
 		"geode.node-ids": ">=v1.20.0"
 	},
+	"tags": [
+		"api",
+		"enhancement",
+		"interface",
+		"online"
+	],
 	"resources": {
         "sprites": [
             "resources/tpl.png",
