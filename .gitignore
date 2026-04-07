@@ -62,3 +62,7 @@ build-*/
 # CLion
 .idea/
 /cmake-build-*/
+resources/tiers_unused/tier_moon_icon.pdn
+resources/update_btn.pdn
+resources/update_btn_old.png
+resources/update_btn_old.pdn
