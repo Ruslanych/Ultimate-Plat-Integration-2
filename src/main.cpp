@@ -445,6 +445,14 @@ $execute {
 	DataLoader::load_data();
 }
 
+class $modify(LevelCell) {
+    static void onModify(auto& self) {
+        if (!self.setHookPriorityPost("LevelCell::loadFromLevel", Priority::Late)) {
+            geode::log::warn("Failed to set hook priority.");
+        }
+    }
+};
+
 class $modify(LevelCellPRI, LevelCell) {
 	struct Fields {
 		CCNode* plat_info_layer;
@@ -461,6 +469,14 @@ class $modify(LevelCellPRI, LevelCell) {
 			
 		CCNode* main_layer = this->getChildByID("main-layer");
 		if (main_layer == nullptr) return;
+		
+		CCNode* ref;
+		if ((ref = main_layer->getChildByID("xboctatuk.globallistpositions/gdl-icon")) != nullptr)
+			ref->setVisible(false);
+		if ((ref = main_layer->getChildByID("xboctatuk.globallistpositions/gdl-label")) != nullptr)
+			ref->setVisible(false);
+		if ((ref = main_layer->getChildByID("hiimjustin000.integrated_demonlist/level-rank-label")) != nullptr)
+			ref->setVisible(false);
 		
 		CCNode* plat_info_layer = CCNode::create();
 		plat_info_layer->setID("plat-integration-layer"_spr);
