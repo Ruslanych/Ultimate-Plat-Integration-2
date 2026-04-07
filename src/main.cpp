@@ -135,8 +135,8 @@ public:
 		return "tier_moon_icon_NA.png"_spr;
 	}
 
-	static void draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* level) {
-		bool in_list_layer = level->m_listPosition != 0;
+	static void draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* level, LevelCell* level_cell) {
+		bool is_compact_mode = level_cell->m_compactView;
 
 		std::shared_ptr<PlatMap> map = LabelHandler::get_plat_map();
 
@@ -153,7 +153,7 @@ public:
 		pemon_label->setAnchorPoint({0, 0.5});
 		pemon_label->setID("pemon-label"_spr);
 
-		if (!in_list_layer) {
+		if (!is_compact_mode) {
 			tpl_sprite->setPositionX(298);
 			tpl_sprite->setPositionY(22);
 			tpl_sprite->setScale(0.3);
@@ -185,7 +185,7 @@ public:
 			tpl_label->setString(map->at(level_id).tpl_placement.c_str());
 			pemon_label->setString(map->at(level_id).pemon_placement.c_str());
 			CCSprite* tier_icon = CCSprite::create(LabelHandler::get_tier_sprite(map->at(level_id).tier).c_str());
-			if (!in_list_layer) {
+			if (!is_compact_mode) {
 				tier_icon->setPositionX(340);
 				tier_icon->setPositionY(15);
 				tier_icon->setScale(0.9);
@@ -205,6 +205,11 @@ public:
 		plat_info_layer->addChild(tpl_label);
 		plat_info_layer->addChild(pemon_sprite);
 		plat_info_layer->addChild(pemon_label);
+
+		// cvolton detection
+		if (is_compact_mode && level->m_listPosition == 0 && level_cell && level_cell->m_mainLayer->getChildByID("completed-icon")) {
+			level_cell->m_mainLayer->getChildByID("completed-icon")->setPositionX(level_cell->m_mainLayer->getChildByID("completed-icon")->getPositionX() - 41.f);
+		}
 	}
 
 	static void redraw_all_layers() {
@@ -213,14 +218,13 @@ public:
 		if ((ref = ref->getChildByIDRecursive("LevelCell")) == nullptr) return;
 		if ((ref = ref->getParent()) == nullptr) return;
 		CCArray* layers = ref->getChildren();
-		for (int i = 0; i < layers->count(); i++) {
+		for (CCNode* node : CCArrayExt<CCNode*>(layers)) {
 			LevelCell* level_cell;
-			if ((level_cell = (LevelCell*) layers->objectAtIndex(i)) == nullptr) continue;
+			if ((level_cell = typeinfo_cast<LevelCell*>(node)) == nullptr) continue;
 			CCNode* plat_info_layer;
-			if ((plat_info_layer = level_cell->getChildByID("main-layer")) == nullptr) continue;
-			if ((plat_info_layer = plat_info_layer->getChildByID("plat-integration-layer"_spr)) == nullptr) continue;
+			if ((plat_info_layer = level_cell->getChildByIDRecursive("plat-integration-layer"_spr)) == nullptr) continue;
 			plat_info_layer->removeAllChildren();
-			LabelHandler::draw_plat_info_layer(plat_info_layer, level_cell->m_level);
+			LabelHandler::draw_plat_info_layer(plat_info_layer, level_cell->m_level, level_cell);
 		}
 	}
 };
@@ -228,13 +232,13 @@ std::shared_ptr<LabelHandler> LabelHandler::instance;
 
 class ReloadDialog : public geode::Popup {
 protected:
-	bool init();
-	void keyBackClicked();
+	bool init() override;
 	void execute(CCObject* sender);
 public:
 	bool working;
+	void keyBackClicked() override;
+	void onClose(CCObject* sender) override;
 	static ReloadDialog* create();
-	void show();
 	void update_progress_screen(int code);
 };
 
@@ -390,6 +394,11 @@ void ReloadDialog::execute(CCObject* sender) {
 	DataLoader::load_data(this);
 }
 
+void ReloadDialog::onClose(CCObject* sender) {
+	if (!this->working)
+	geode::Popup::onClose(sender);
+}
+
 ReloadDialog* ReloadDialog::create() {
 	auto ret = new ReloadDialog();
 	if (ret->init()) {
@@ -399,10 +408,6 @@ ReloadDialog* ReloadDialog::create() {
 
 	delete ret;
 	return nullptr;
-}
-
-void ReloadDialog::show() {
-	geode::Popup::show();
 }
 
 void ReloadDialog::update_progress_screen(int code) {
@@ -446,25 +451,28 @@ $execute {
 }
 
 class $modify(LevelCellPRI, LevelCell) {
+	static void onModify(auto& self) {
+		(void) self.setHookPriorityAfterPost("LevelCell::loadCustomLevelCell", "cvolton.compact_lists");
+	}
+
 	struct Fields {
 		CCNode* plat_info_layer;
 		TaskHolder<void> task_holder;
 	};
 	
-	void loadFromLevel(GJGameLevel* level) {
-		LevelCell::loadFromLevel(level);
-		if (!level->isPlatformer()) return;
-		if (!level ||
-			level->m_levelType == GJLevelType::Main ||
-			level->m_levelType == GJLevelType::Editor)
+	void loadCustomLevelCell() {
+		LevelCell::loadCustomLevelCell();
+		if (!this->m_level || !this->m_level->isPlatformer() || 
+			this->m_level->m_levelType == GJLevelType::Main ||
+			this->m_level->m_levelType == GJLevelType::Editor)
 			return;
-			
+
 		CCNode* main_layer = this->getChildByID("main-layer");
 		if (main_layer == nullptr) return;
 		
 		CCNode* plat_info_layer = CCNode::create();
 		plat_info_layer->setID("plat-integration-layer"_spr);
-		LabelHandler::draw_plat_info_layer(plat_info_layer, level);
+		LabelHandler::draw_plat_info_layer(plat_info_layer, this->m_level, this);
 		
 		main_layer->addChild(plat_info_layer);
 	}
@@ -482,6 +490,7 @@ class $modify(LevelBrowserLayerPRI, LevelBrowserLayer) {
 				ReloadDialog::create()->show();
 			});
 		page_menu->addChild(buttonBtn);
+		page_menu->updateLayout();
 
 		return true;
 	}
