@@ -20,6 +20,14 @@
 		"interface",
 		"online"
 	],
+	"settings": {
+		"hide-pemonlist": {
+			"name": "Hide IntegratedDemonlist pemons",
+			"description": "Disables \"Integrated Demon list\" mod from loading Pemonlist label",
+			"type": "bool",
+			"default": true
+		}
+	},
 	"resources": {
         "sprites": [
             "resources/tpl.png",
