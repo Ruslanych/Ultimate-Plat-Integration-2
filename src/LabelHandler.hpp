@@ -11,6 +11,7 @@ private:
 	std::shared_ptr<PlatMap> platformer_map;
 	LabelHandler();
 	static std::shared_ptr<LabelHandler> get_instance();
+    static void level_cell_moveNextToView(LevelCell* level_cell, CCNode* node);
 public:
 	static std::shared_ptr<PlatMap> get_plat_map();
 	static std::string get_tier_sprite(std::string tier_string);

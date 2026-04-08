@@ -1,7 +1,5 @@
 #include "LabelHandler.hpp"
 
-#include "PlatInformation.hpp"
-
 LabelHandler::LabelHandler() {
     this->platformer_map = std::shared_ptr<PlatMap>(new std::map<std::string, PlatInformation>());
 }
@@ -10,6 +8,20 @@ std::shared_ptr<LabelHandler> LabelHandler::get_instance() {
     if (!LabelHandler::instance)
     LabelHandler::instance = std::shared_ptr<LabelHandler> (new LabelHandler());
     return LabelHandler::instance;
+}
+
+void LabelHandler::level_cell_moveNextToView(LevelCell* level_cell, CCNode* node) {  // Almost direct copy from cvolton.compact-lists
+    if(!node) return;
+
+    auto viewButton = level_cell->m_mainMenu->getChildByID("view-button");
+    if(!viewButton) return;
+
+    /*node->setPositionX(viewButton->getPositionX() - viewButton->getScaledContentSize().width - 5 - node->getScaledContentSize().width / 2);
+    node->setPositionY(viewButton->getPositionY());
+
+    node->setPosition(m_mainLayer->convertToNodeSpace(m_mainMenu->convertToWorldSpace(node->getPosition())));*/
+    node->setPosition({276, 25});
+    //node->setPosition({276 - (node->getScaledContentSize().width / 2), 25});
 }
 
 std::shared_ptr<PlatMap> LabelHandler::get_plat_map() {
@@ -62,7 +74,6 @@ void LabelHandler::draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* le
     CCLabelBMFont* pemon_label = CCLabelBMFont::create("", "bigFont.fnt");
     pemon_label->setAnchorPoint({0, 0.5});
     pemon_label->setID("pemon-label"_spr);
-
     if (!is_compact_mode) {
         tpl_sprite->setPositionX(298);
         tpl_sprite->setPositionY(22);
@@ -92,7 +103,7 @@ void LabelHandler::draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* le
     }
 
     if (map->contains(level_id)) {
-        if (Mod::get()->getSettingValue<bool>("hide-pemonlist-label")
+        if (Mod::get()->getSettingValue<bool>("hide-aredl")
         && (ref = level_cell->getChildByID("main-layer"))
         && (ref = ref->getChildByID("hiimjustin000.integrated_demonlist/level-rank-label")))
             ref->setVisible(false);
@@ -109,8 +120,7 @@ void LabelHandler::draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* le
             tier_icon->setScale(0.75);
             if (level->m_listPosition == 0
             && (ref = level_cell->m_mainLayer->getChildByID("completed-icon"))) {  // Cvolton :: CompactLists Detection
-                // level_cell->moveNextToView(ref);
-                log::debug("1");
+                LabelHandler::level_cell_moveNextToView(level_cell, ref);
                 ref->setPositionX(ref->getPositionX() - 41.f);
             }
         }

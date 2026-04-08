@@ -8,7 +8,7 @@
 	},
 	"id": "ruslanych.ultimate-plat-integration-2",
 	"name": "Ultimate Plat Integration",
-	"version": "v1.0.2",
+	"version": "v1.0.3",
 	"developer": "Ruslanych",
 	"description": "Every Platformer List + Difficulty Chart",
 	"dependencies": {
@@ -21,9 +21,15 @@
 		"online"
 	],
 	"settings": {
-		"hide-pemonlist": {
-			"name": "Hide IntegratedDemonlist pemons",
-			"description": "Disables \"Integrated Demon list\" mod from loading Pemonlist label",
+		"hide-aredl": {
+			"name": "Hide \"Integrated Demonlist\" label",
+			"description": "Hides \"Integrated Demonlist\" mod's label for platformers (kinda)",
+			"type": "bool",
+			"default": true
+		},
+		"hide-global-list": {
+			"name": "Hide \"Global List Integrated\" label",
+			"description": "Hides \"Global List Integrated\" mod's label for platformers",
 			"type": "bool",
 			"default": true
 		}
