@@ -8,7 +8,7 @@
 	},
 	"id": "ruslanych.ultimate-plat-integration-2",
 	"name": "Ultimate Plat Integration",
-	"version": "v1.0.4",
+	"version": "v1.0.5",
 	"developer": "Ruslanych",
 	"description": "Every Platformer List + Difficulty Chart",
 	"dependencies": {
