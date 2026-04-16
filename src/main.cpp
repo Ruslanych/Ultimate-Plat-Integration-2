@@ -8,9 +8,9 @@ using namespace geode::prelude;
 #include "ReloadDialog.hpp"
 #include "DataLoader.hpp"
 #include "LabelHandler.hpp"
-#include "hooks/LevelCellMod.hpp"
-#include "hooks/LevelBrowserLayerMod.hpp"
-#include "hooks/LevelInfoLayerMod.hpp"
+#include "hooks/LevelCell.hpp"
+#include "hooks/LevelBrowserLayer.hpp"
+#include "hooks/LevelInfoLayer.hpp"
 
 $execute {
 	DataLoader::load_data();

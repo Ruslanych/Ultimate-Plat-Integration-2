@@ -9,6 +9,14 @@ class $modify(LevelInfoLayerMod, LevelInfoLayer) {
 
     bool init(GJGameLevel* level, bool challenge) {
         if (!LevelInfoLayer::init(level, challenge)) return false;
+
+        if (!Mod::get()->getSettingValue<bool>("enable-mod")) return true;
+        if (!Mod::get()->getSettingValue<bool>("enable-levelinfolayer")) return true;
+        
+        if (!level || !level->isPlatformer() || 
+			level->m_levelType == GJLevelType::Main ||
+			level->m_levelType == GJLevelType::Editor)
+			return true;
         CCNode* ref;
         if ((ref = this->getChildByID("b1rtek.gddlintegration/rating-menu")))
             ref->setVisible(false);

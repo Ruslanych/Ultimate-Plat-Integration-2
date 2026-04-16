@@ -20,6 +20,10 @@ class $modify(LevelCellMod, LevelCell) {
 	
 	void loadFromLevel(GJGameLevel* level) {
 		LevelCell::loadFromLevel(level);
+
+        if (!Mod::get()->getSettingValue<bool>("enable-mod")) return;
+        if (!Mod::get()->getSettingValue<bool>("enable-levelcell")) return;
+		
 		if (!level || !level->isPlatformer() || 
 			level->m_levelType == GJLevelType::Main ||
 			level->m_levelType == GJLevelType::Editor)

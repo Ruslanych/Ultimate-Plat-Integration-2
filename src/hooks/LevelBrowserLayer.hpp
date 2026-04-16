@@ -10,6 +10,10 @@ class $modify(LevelBrowserLayerMod, LevelBrowserLayer) {
 	bool init(GJSearchObject* object) {
 		if (!LevelBrowserLayer::init(object)) return false;
 		
+        if (!Mod::get()->getSettingValue<bool>("enable-mod")) return true;
+        if (!Mod::get()->getSettingValue<bool>("enable-levelcell")
+         && !Mod::get()->getSettingValue<bool>("enable-levelinfolayer")) return true;
+		
 		CCMenuItem* page_menu = (CCMenuItem*) this->getChildByID("page-menu");
 		if (page_menu == nullptr) return true;
 

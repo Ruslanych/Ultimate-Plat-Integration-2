@@ -24,24 +24,44 @@
 		"online"
 	],
 	"settings": {
+		"enable-mod": {
+			"name": "Enable mod",
+			"type": "bool",
+			"default": true
+		},
+		"enable-levelcell": {
+			"name": "Show in levels tab",
+			"type": "bool",
+			"default": true,
+			"enable-if": "enable-mod"
+		},
+		"enable-levelinfolayer": {
+			"name": "Show on level page",
+			"type": "bool",
+			"default": true,
+			"enable-if": "enable-mod"
+		},
 		"hide-aredl": {
 			"name": "Hide \"Integrated Demonlist\" label",
 			"description": "Hides \"Integrated Demonlist\" mod's label for platformers (kinda)",
 			"type": "bool",
-			"default": true
+			"default": true,
+			"enable-if": "enable-mod"
 		},
 		"hide-global-list": {
 			"name": "Hide \"Global List Integrated\" label",
 			"description": "Hides \"Global List Integrated\" mod's label for platformers",
 			"type": "bool",
-			"default": true
+			"default": true,
+			"enable-if": "enable-mod"
 		},
 		"compact-mode": {
 			"name": "Compact labels mode",
 			"description": "Configures the compatibility with other mods",
 			"type": "string",
 			"one-of": ["Standart", "SendDB compact"],
-			"default": "Standart"
+			"default": "Standart",
+			"enable-if": "enable-mod"
 		}
 	},
 	"resources": {
