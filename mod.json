@@ -8,11 +8,14 @@
 	},
 	"id": "ruslanych.ultimate-plat-integration-2",
 	"name": "Ultimate Plat Integration",
-	"version": "v1.0.3",
+	"version": "v1.0.4",
 	"developer": "Ruslanych",
 	"description": "Every Platformer List + Difficulty Chart",
 	"dependencies": {
 		"geode.node-ids": ">=v1.20.0"
+	},
+	"links": {
+		"source": "https://github.com/Ruslanych/Ultimate-Plat-Integration-2"
 	},
 	"tags": [
 		"api",
@@ -32,6 +35,13 @@
 			"description": "Hides \"Global List Integrated\" mod's label for platformers",
 			"type": "bool",
 			"default": true
+		},
+		"compact-mode": {
+			"name": "Compact labels mode",
+			"description": "Configures the compatibility with other mods",
+			"type": "string",
+			"one-of": ["Standart", "SendDB compact"],
+			"default": "Standart"
 		}
 	},
 	"resources": {

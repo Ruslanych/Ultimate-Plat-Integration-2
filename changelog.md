@@ -1,4 +1,8 @@
 # Changelog
+## 1.0.4
+- Added the labels to the Level Info Layer
+- Added compact modes for compatibility (SendDB available, will be expanding if needed)
+- Expanded data sheet
 ## 1.0.3
 - Fixed reload button's layout (tysm erymanthus), updated the sprite
 - Fixed compatibility with Cvolton's CompactLists (tysm erymanthus)

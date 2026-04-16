@@ -37,7 +37,7 @@ class $modify(LevelCellMod, LevelCell) {
 		}
 		CCNode* plat_info_layer = CCNode::create();
 		plat_info_layer->setID("plat-integration-layer"_spr);
-		LabelHandler::draw_plat_info_layer(plat_info_layer, level, this);
+		LabelHandler::draw_plat_info_layer(plat_info_layer, level, this, nullptr);
 		
 		main_layer->addChild(plat_info_layer);
 	}

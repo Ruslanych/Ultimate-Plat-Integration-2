@@ -10,6 +10,7 @@ using namespace geode::prelude;
 #include "LabelHandler.hpp"
 #include "hooks/LevelCellMod.hpp"
 #include "hooks/LevelBrowserLayerMod.hpp"
+#include "hooks/LevelInfoLayerMod.hpp"
 
 $execute {
 	DataLoader::load_data();

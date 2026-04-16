@@ -55,8 +55,9 @@ std::string LabelHandler::get_tier_sprite(std::string tier_string) {
     return "tier_moon_icon_NA.png"_spr;
 }
 
-void LabelHandler::draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* level, LevelCell* level_cell) {
-    bool is_compact_mode = level_cell->m_compactView;
+void LabelHandler::draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* level, LevelCell* level_cell, LevelInfoLayer* level_info_layer) {
+    bool is_compact_mode = false;
+    if (level_cell) is_compact_mode = level_cell->m_compactView;
 
     CCNode* ref;
 
@@ -74,25 +75,27 @@ void LabelHandler::draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* le
     CCLabelBMFont* pemon_label = CCLabelBMFont::create("", "bigFont.fnt");
     pemon_label->setAnchorPoint({0, 0.5});
     pemon_label->setID("pemon-label"_spr);
-    if (!is_compact_mode) {
-        tpl_sprite->setPositionX(298);
-        tpl_sprite->setPositionY(22);
+
+    std::string compact_mode = Mod::get()->getSettingValue<std::string>("compact-mode");
+    if (level_info_layer) {
+        tpl_sprite->setPositionX(-32.5);
+        tpl_sprite->setPositionY(0);
         tpl_sprite->setScale(0.3);
-        tpl_label->setPositionX(306);
-        tpl_label->setPositionY(23);
+        tpl_label->setPositionX(-25);
+        tpl_label->setPositionY(0 + 0.1);
         tpl_label->setScale(0.45);
-        pemon_sprite->setPositionX(298);
-        pemon_sprite->setPositionY(8);
+        pemon_sprite->setPositionX(-32);
+        pemon_sprite->setPositionY(-14);
         pemon_sprite->setScale(0.3);
-        pemon_label->setPositionX(306);
-        pemon_label->setPositionY(8);
+        pemon_label->setPositionX(-25);
+        pemon_label->setPositionY(-14);
         pemon_label->setScale(0.35);
-    } else {
+    } else if (is_compact_mode) {
         tpl_sprite->setPositionX(248);
         tpl_sprite->setPositionY(29);
         tpl_sprite->setScale(0.25);
         tpl_label->setPositionX(254.5);
-        tpl_label->setPositionY(30);
+        tpl_label->setPositionY(30 + 0.1);
         tpl_label->setScale(0.35);
         pemon_sprite->setPositionX(248);
         pemon_sprite->setPositionY(18);
@@ -100,29 +103,77 @@ void LabelHandler::draw_plat_info_layer(CCNode* plat_info_layer, GJGameLevel* le
         pemon_label->setPositionX(254.5);
         pemon_label->setPositionY(19);
         pemon_label->setScale(0.27);
+    } else if (compact_mode == "SendDB compact") {
+        tpl_sprite->setPositionX(293.5);
+        tpl_sprite->setPositionY(6.5);
+        tpl_sprite->setScale(0.25);
+        tpl_label->setPositionX(300);
+        tpl_label->setPositionY(7 + 0.1);
+        tpl_label->setScale(0.38);
+        pemon_sprite->setPositionX(326);
+        pemon_sprite->setPositionY(7);
+        pemon_sprite->setScale(0.24);
+        pemon_label->setPositionX(331);
+        pemon_label->setPositionY(7);
+        pemon_label->setScale(0.30);
+    } else {
+        tpl_sprite->setPositionX(298);
+        tpl_sprite->setPositionY(22);
+        tpl_sprite->setScale(0.3);
+        tpl_label->setPositionX(306);
+        tpl_label->setPositionY(23 + 0.1);
+        tpl_label->setScale(0.45);
+        pemon_sprite->setPositionX(298);
+        pemon_sprite->setPositionY(8);
+        pemon_sprite->setScale(0.3);
+        pemon_label->setPositionX(306);
+        pemon_label->setPositionY(8);
+        pemon_label->setScale(0.35);
     }
 
     if (map->contains(level_id)) {
         if (Mod::get()->getSettingValue<bool>("hide-aredl")
+        && (level_cell)
         && (ref = level_cell->getChildByID("main-layer"))
         && (ref = ref->getChildByID("hiimjustin000.integrated_demonlist/level-rank-label")))
             ref->setVisible(false);
         tpl_label->setString(map->at(level_id).tpl_placement.c_str());
         pemon_label->setString(map->at(level_id).pemon_placement.c_str());
         CCSprite* tier_icon = CCSprite::create(LabelHandler::get_tier_sprite(map->at(level_id).tier).c_str());
-        if (!is_compact_mode) {
-            tier_icon->setPositionX(340);
-            tier_icon->setPositionY(15);
-            tier_icon->setScale(0.9);
-        } else {
+        if (level_info_layer) {
+            tier_icon->setPositionX(-20);
+            tier_icon->setPositionY(25);
+            tier_icon->setScale(1.25);
+        } else if (is_compact_mode) {
             tier_icon->setPositionX(281.25);
             tier_icon->setPositionY(24);
             tier_icon->setScale(0.75);
             if (level->m_listPosition == 0
+            && (level_cell)
             && (ref = level_cell->m_mainLayer->getChildByID("completed-icon"))) {  // Cvolton :: CompactLists Detection
                 LabelHandler::level_cell_moveNextToView(level_cell, ref);
                 ref->setPositionX(ref->getPositionX() - 41.f);
             }
+        } else if (compact_mode== "SendDB compact") {
+            tier_icon->setPositionX(344);
+            tier_icon->setPositionY(20);
+            tier_icon->setScale(0.7);
+        } else if (compact_mode == "Compact mode 2") {
+            tier_icon->setPositionX(343);
+            tier_icon->setPositionY(19);
+            tier_icon->setScale(0.65);
+        } else if (compact_mode == "Ultra compact 1") {
+            tier_icon->setPositionX(343);
+            tier_icon->setPositionY(12);
+            tier_icon->setScale(0.65);
+        } else if (compact_mode == "Ultra compact 2") {
+            tier_icon->setPositionX(343);
+            tier_icon->setPositionY(15);
+            tier_icon->setScale(0.65);
+        } else {
+            tier_icon->setPositionX(340);
+            tier_icon->setPositionY(15);
+            tier_icon->setScale(0.9);
         }
         tier_icon->setID("tier-icon"_spr);
         plat_info_layer->addChild(tier_icon);
@@ -149,7 +200,7 @@ void LabelHandler::redraw_all_layers() {
         CCNode* plat_info_layer;
         if (!(plat_info_layer = level_cell->getChildByIDRecursive("plat-integration-layer"_spr))) continue;
         plat_info_layer->removeAllChildren();
-        LabelHandler::draw_plat_info_layer(plat_info_layer, level_cell->m_level, level_cell);
+        LabelHandler::draw_plat_info_layer(plat_info_layer, level_cell->m_level, level_cell, nullptr);
     }
 }
 std::shared_ptr<LabelHandler> LabelHandler::instance;
