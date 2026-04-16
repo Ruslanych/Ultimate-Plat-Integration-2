@@ -12,7 +12,7 @@
 	"developer": "Ruslanych",
 	"description": "Every Platformer List + Difficulty Chart",
 	"dependencies": {
-		"geode.node-ids": ">=v1.20.0"
+		"geode.node-ids": ">=v1.23.3"
 	},
 	"links": {
 		"source": "https://github.com/Ruslanych/Ultimate-Plat-Integration-2"
