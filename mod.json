@@ -59,8 +59,8 @@
 			"name": "Compact labels mode",
 			"description": "Configures the compatibility with other mods",
 			"type": "string",
-			"one-of": ["Standart", "SendDB compact"],
-			"default": "Standart",
+			"one-of": ["Standard", "SendDB compact"],
+			"default": "Standard",
 			"enable-if": "enable-mod"
 		}
 	},
